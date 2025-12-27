@@ -1,0 +1,141 @@
+%General Mission Analysis Tool(GMAT) Script
+%Created: 2022-12-21 16:32:48
+
+
+%----------------------------------------
+%---------- Spacecraft
+%----------------------------------------
+
+Create Spacecraft Jerrico;
+GMAT Jerrico.DateFormat = UTCGregorian;
+GMAT Jerrico.Epoch = '01 Jan 2024 11:59:28.000';
+GMAT Jerrico.CoordinateSystem = EarthMJ2000Eq;
+GMAT Jerrico.DisplayStateType = Keplerian;
+GMAT Jerrico.SMA = 83474.31800000001;
+GMAT Jerrico.ECC = 0.89652;
+GMAT Jerrico.INC = 12.4606;
+GMAT Jerrico.RAAN = 292.8362;
+GMAT Jerrico.AOP = 218.9805;
+GMAT Jerrico.TA = 180;
+GMAT Jerrico.DryMass = 850;
+GMAT Jerrico.Cd = 2.2;
+GMAT Jerrico.Cr = 1.8;
+GMAT Jerrico.DragArea = 15;
+GMAT Jerrico.SRPArea = 1;
+GMAT Jerrico.SPADDragScaleFactor = 1;
+GMAT Jerrico.SPADSRPScaleFactor = 1;
+GMAT Jerrico.NAIFId = -10003001;
+GMAT Jerrico.NAIFIdReferenceFrame = -9003001;
+GMAT Jerrico.OrbitColor = Red;
+GMAT Jerrico.TargetColor = Teal;
+GMAT Jerrico.OrbitErrorCovariance = [ 1e+70 0 0 0 0 0 ; 0 1e+70 0 0 0 0 ; 0 0 1e+70 0 0 0 ; 0 0 0 1e+70 0 0 ; 0 0 0 0 1e+70 0 ; 0 0 0 0 0 1e+70 ];
+GMAT Jerrico.CdSigma = 1e+70;
+GMAT Jerrico.CrSigma = 1e+70;
+GMAT Jerrico.Id = 'SatId';
+GMAT Jerrico.Attitude = CoordinateSystemFixed;
+GMAT Jerrico.SPADSRPInterpolationMethod = Bilinear;
+GMAT Jerrico.SPADSRPScaleFactorSigma = 1e+70;
+GMAT Jerrico.SPADDragInterpolationMethod = Bilinear;
+GMAT Jerrico.SPADDragScaleFactorSigma = 1e+70;
+GMAT Jerrico.ModelFile = 'aura.3ds';
+GMAT Jerrico.ModelOffsetX = 0;
+GMAT Jerrico.ModelOffsetY = 0;
+GMAT Jerrico.ModelOffsetZ = 0;
+GMAT Jerrico.ModelRotationX = 0;
+GMAT Jerrico.ModelRotationY = 0;
+GMAT Jerrico.ModelRotationZ = 0;
+GMAT Jerrico.ModelScale = 1;
+GMAT Jerrico.AttitudeDisplayStateType = 'Quaternion';
+GMAT Jerrico.AttitudeRateDisplayStateType = 'AngularVelocity';
+GMAT Jerrico.AttitudeCoordinateSystem = EarthMJ2000Eq;
+GMAT Jerrico.EulerAngleSequence = '321';
+
+%----------------------------------------
+%---------- ForceModels
+%----------------------------------------
+
+Create ForceModel DefaultProp_ForceModel;
+GMAT DefaultProp_ForceModel.CentralBody = Earth;
+GMAT DefaultProp_ForceModel.PrimaryBodies = {Earth};
+GMAT DefaultProp_ForceModel.Drag = None;
+GMAT DefaultProp_ForceModel.SRP = Off;
+GMAT DefaultProp_ForceModel.RelativisticCorrection = Off;
+GMAT DefaultProp_ForceModel.ErrorControl = RSSStep;
+GMAT DefaultProp_ForceModel.GravityField.Earth.Degree = 4;
+GMAT DefaultProp_ForceModel.GravityField.Earth.Order = 4;
+GMAT DefaultProp_ForceModel.GravityField.Earth.StmLimit = 100;
+GMAT DefaultProp_ForceModel.GravityField.Earth.PotentialFile = 'JGM2.cof';
+GMAT DefaultProp_ForceModel.GravityField.Earth.TideModel = 'None';
+
+%----------------------------------------
+%---------- Propagators
+%----------------------------------------
+
+Create Propagator DefaultProp;
+GMAT DefaultProp.FM = DefaultProp_ForceModel;
+GMAT DefaultProp.Type = RungeKutta89;
+GMAT DefaultProp.InitialStepSize = 60;
+GMAT DefaultProp.Accuracy = 9.999999999999999e-12;
+GMAT DefaultProp.MinStep = 0.001;
+GMAT DefaultProp.MaxStep = 2700;
+GMAT DefaultProp.MaxStepAttempts = 50;
+GMAT DefaultProp.StopIfAccuracyIsViolated = true;
+
+%----------------------------------------
+%---------- Subscribers
+%----------------------------------------
+
+Create OrbitView DefaultOrbitView;
+GMAT DefaultOrbitView.SolverIterations = Current;
+GMAT DefaultOrbitView.UpperLeft = [ 0 0 ];
+GMAT DefaultOrbitView.Size = [ 0 0 ];
+GMAT DefaultOrbitView.RelativeZOrder = 0;
+GMAT DefaultOrbitView.Maximized = false;
+GMAT DefaultOrbitView.Add = {Jerrico, Earth};
+GMAT DefaultOrbitView.CoordinateSystem = EarthMJ2000Eq;
+GMAT DefaultOrbitView.DrawObject = [ true true ];
+GMAT DefaultOrbitView.DataCollectFrequency = 1;
+GMAT DefaultOrbitView.UpdatePlotFrequency = 50;
+GMAT DefaultOrbitView.NumPointsToRedraw = 0;
+GMAT DefaultOrbitView.ShowPlot = true;
+GMAT DefaultOrbitView.MaxPlotPoints = 20000;
+GMAT DefaultOrbitView.ShowLabels = true;
+GMAT DefaultOrbitView.ViewPointReference = Earth;
+GMAT DefaultOrbitView.ViewPointVector = [ 30000 0 0 ];
+GMAT DefaultOrbitView.ViewDirection = Earth;
+GMAT DefaultOrbitView.ViewScaleFactor = 1;
+GMAT DefaultOrbitView.ViewUpCoordinateSystem = EarthMJ2000Eq;
+GMAT DefaultOrbitView.ViewUpAxis = Z;
+GMAT DefaultOrbitView.EclipticPlane = Off;
+GMAT DefaultOrbitView.XYPlane = On;
+GMAT DefaultOrbitView.WireFrame = Off;
+GMAT DefaultOrbitView.Axes = On;
+GMAT DefaultOrbitView.Grid = Off;
+GMAT DefaultOrbitView.SunLine = Off;
+GMAT DefaultOrbitView.UseInitialView = On;
+GMAT DefaultOrbitView.StarCount = 7000;
+GMAT DefaultOrbitView.EnableStars = On;
+GMAT DefaultOrbitView.EnableConstellations = On;
+
+Create GroundTrackPlot DefaultGroundTrackPlot;
+GMAT DefaultGroundTrackPlot.SolverIterations = Current;
+GMAT DefaultGroundTrackPlot.UpperLeft = [ 0 0 ];
+GMAT DefaultGroundTrackPlot.Size = [ 0 0 ];
+GMAT DefaultGroundTrackPlot.RelativeZOrder = 0;
+GMAT DefaultGroundTrackPlot.Maximized = false;
+GMAT DefaultGroundTrackPlot.Add = {Jerrico};
+GMAT DefaultGroundTrackPlot.DataCollectFrequency = 1;
+GMAT DefaultGroundTrackPlot.UpdatePlotFrequency = 50;
+GMAT DefaultGroundTrackPlot.NumPointsToRedraw = 0;
+GMAT DefaultGroundTrackPlot.ShowPlot = true;
+GMAT DefaultGroundTrackPlot.MaxPlotPoints = 20000;
+GMAT DefaultGroundTrackPlot.CentralBody = Earth;
+GMAT DefaultGroundTrackPlot.TextureMap = 'ModifiedBlueMarble.jpg';
+
+
+%----------------------------------------
+%---------- Mission Sequence
+%----------------------------------------
+
+BeginMissionSequence;
+Propagate DefaultProp(Jerrico) {Jerrico.ElapsedSecs = 12000.0};

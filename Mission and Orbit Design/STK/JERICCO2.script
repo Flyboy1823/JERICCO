@@ -1,0 +1,207 @@
+%General Mission Analysis Tool(GMAT) Script
+%Created: 2023-03-28 13:46:03
+
+
+%----------------------------------------
+%---------- Spacecraft
+%----------------------------------------
+
+Create Spacecraft JERICCO;
+GMAT JERICCO.DateFormat = UTCGregorian;
+GMAT JERICCO.Epoch = '19 Sep 2024 00:00:00.000';
+GMAT JERICCO.CoordinateSystem = LunaEquator;
+GMAT JERICCO.DisplayStateType = Keplerian;
+GMAT JERICCO.SMA = 1937.400000000016;
+GMAT JERICCO.ECC = 3.860741784839577e-15;
+GMAT JERICCO.INC = 86;
+GMAT JERICCO.RAAN = 24.99999999999983;
+GMAT JERICCO.AOP = 0;
+GMAT JERICCO.TA = 0;
+GMAT JERICCO.DryMass = 13.2;
+GMAT JERICCO.Cd = 2.2;
+GMAT JERICCO.Cr = 1.8;
+GMAT JERICCO.DragArea = 15;
+GMAT JERICCO.SRPArea = 1;
+GMAT JERICCO.SPADDragScaleFactor = 1;
+GMAT JERICCO.SPADSRPScaleFactor = 1;
+GMAT JERICCO.AtmosDensityScaleFactor = 1;
+GMAT JERICCO.ExtendedMassPropertiesModel = 'None';
+GMAT JERICCO.NAIFId = -10000001;
+GMAT JERICCO.NAIFIdReferenceFrame = -9000001;
+GMAT JERICCO.OrbitColor = Red;
+GMAT JERICCO.TargetColor = Teal;
+GMAT JERICCO.OrbitErrorCovariance = [ 1e+70 0 0 0 0 0 ; 0 1e+70 0 0 0 0 ; 0 0 1e+70 0 0 0 ; 0 0 0 1e+70 0 0 ; 0 0 0 0 1e+70 0 ; 0 0 0 0 0 1e+70 ];
+GMAT JERICCO.CdSigma = 1e+70;
+GMAT JERICCO.CrSigma = 1e+70;
+GMAT JERICCO.Id = 'SatId';
+GMAT JERICCO.Attitude = CoordinateSystemFixed;
+GMAT JERICCO.SPADSRPInterpolationMethod = Bilinear;
+GMAT JERICCO.SPADSRPScaleFactorSigma = 1e+70;
+GMAT JERICCO.SPADDragInterpolationMethod = Bilinear;
+GMAT JERICCO.SPADDragScaleFactorSigma = 1e+70;
+GMAT JERICCO.AtmosDensityScaleFactorSigma = 1e+70;
+GMAT JERICCO.ModelFile = 'aura.3ds';
+GMAT JERICCO.ModelOffsetX = 0;
+GMAT JERICCO.ModelOffsetY = 0;
+GMAT JERICCO.ModelOffsetZ = 0;
+GMAT JERICCO.ModelRotationX = 0;
+GMAT JERICCO.ModelRotationY = 0;
+GMAT JERICCO.ModelRotationZ = 0;
+GMAT JERICCO.ModelScale = 1;
+GMAT JERICCO.AttitudeDisplayStateType = 'Quaternion';
+GMAT JERICCO.AttitudeRateDisplayStateType = 'AngularVelocity';
+GMAT JERICCO.AttitudeCoordinateSystem = LunaEquator;
+GMAT JERICCO.EulerAngleSequence = '321';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%----------------------------------------
+%---------- ForceModels
+%----------------------------------------
+
+Create ForceModel DefaultProp_ForceModel;
+GMAT DefaultProp_ForceModel.CentralBody = Luna;
+GMAT DefaultProp_ForceModel.PointMasses = {Earth, Luna, Sun};
+GMAT DefaultProp_ForceModel.Drag = None;
+GMAT DefaultProp_ForceModel.SRP = Off;
+GMAT DefaultProp_ForceModel.RelativisticCorrection = Off;
+GMAT DefaultProp_ForceModel.ErrorControl = RSSStep;
+
+%----------------------------------------
+%---------- Propagators
+%----------------------------------------
+
+Create Propagator DefaultProp;
+GMAT DefaultProp.FM = DefaultProp_ForceModel;
+GMAT DefaultProp.Type = RungeKutta89;
+GMAT DefaultProp.InitialStepSize = 60;
+GMAT DefaultProp.Accuracy = 9.999999999999999e-12;
+GMAT DefaultProp.MinStep = 0.001;
+GMAT DefaultProp.MaxStep = 300;
+GMAT DefaultProp.MaxStepAttempts = 50;
+GMAT DefaultProp.StopIfAccuracyIsViolated = true;
+
+%----------------------------------------
+%---------- Coordinate Systems
+%----------------------------------------
+
+Create CoordinateSystem LunaEquator;
+GMAT LunaEquator.Origin = Luna;
+GMAT LunaEquator.Axes = Equator;
+
+Create CoordinateSystem LunaFixed;
+GMAT LunaFixed.Origin = Luna;
+GMAT LunaFixed.Axes = BodyFixed;
+
+%----------------------------------------
+%---------- Solvers
+%----------------------------------------
+
+Create DifferentialCorrector DefaultDC;
+GMAT DefaultDC.ShowProgress = true;
+GMAT DefaultDC.ReportStyle = Normal;
+GMAT DefaultDC.ReportFile = 'DifferentialCorrectorDefaultDC.data';
+GMAT DefaultDC.MaximumIterations = 100;
+GMAT DefaultDC.DerivativeMethod = CentralDifference;
+GMAT DefaultDC.Algorithm = NewtonRaphson;
+
+%----------------------------------------
+%---------- Subscribers
+%----------------------------------------
+
+Create OrbitView Moon3D;
+GMAT Moon3D.SolverIterations = None;
+GMAT Moon3D.UpperLeft = [ 0 0 ];
+GMAT Moon3D.Size = [ 0.5325331648768161 0.4476190476190476 ];
+GMAT Moon3D.RelativeZOrder = 3035;
+GMAT Moon3D.Maximized = false;
+GMAT Moon3D.Add = {JERICCO, Earth, Luna, Sun};
+GMAT Moon3D.CoordinateSystem = LunaEquator;
+GMAT Moon3D.DrawObject = [ true true true true ];
+GMAT Moon3D.DataCollectFrequency = 1;
+GMAT Moon3D.UpdatePlotFrequency = 50;
+GMAT Moon3D.NumPointsToRedraw = 0;
+GMAT Moon3D.ShowPlot = true;
+GMAT Moon3D.MaxPlotPoints = 20000;
+GMAT Moon3D.ShowLabels = true;
+GMAT Moon3D.ViewPointReference = Luna;
+GMAT Moon3D.ViewPointVector = [ 6000 6000 6000 ];
+GMAT Moon3D.ViewDirection = Luna;
+GMAT Moon3D.ViewScaleFactor = 1;
+GMAT Moon3D.ViewUpCoordinateSystem = LunaEquator;
+GMAT Moon3D.ViewUpAxis = Z;
+GMAT Moon3D.EclipticPlane = Off;
+GMAT Moon3D.XYPlane = Off;
+GMAT Moon3D.WireFrame = Off;
+GMAT Moon3D.Axes = On;
+GMAT Moon3D.Grid = Off;
+GMAT Moon3D.SunLine = Off;
+GMAT Moon3D.UseInitialView = On;
+GMAT Moon3D.StarCount = 7000;
+GMAT Moon3D.EnableStars = On;
+GMAT Moon3D.EnableConstellations = On;
+
+Create ReportFile EarthLoctionRelativeToMoonReport;
+GMAT EarthLoctionRelativeToMoonReport.SolverIterations = All;
+GMAT EarthLoctionRelativeToMoonReport.UpperLeft = [ 0.08764705882352941 0.1773809523809524 ];
+GMAT EarthLoctionRelativeToMoonReport.Size = [ 0.5952941176470589 0.7904761904761904 ];
+GMAT EarthLoctionRelativeToMoonReport.RelativeZOrder = 227;
+GMAT EarthLoctionRelativeToMoonReport.Maximized = false;
+GMAT EarthLoctionRelativeToMoonReport.Filename = 'C:\Studies\GMAT\Earth_UTCXYZ_Moon.txt';
+GMAT EarthLoctionRelativeToMoonReport.Precision = 16;
+GMAT EarthLoctionRelativeToMoonReport.Add = {JERICCO.UTCGregorian, Earth.LunaEquator.X, Earth.LunaEquator.Y, Earth.LunaEquator.Z};
+GMAT EarthLoctionRelativeToMoonReport.WriteHeaders = true;
+GMAT EarthLoctionRelativeToMoonReport.LeftJustify = On;
+GMAT EarthLoctionRelativeToMoonReport.ZeroFill = Off;
+GMAT EarthLoctionRelativeToMoonReport.FixedWidth = true;
+GMAT EarthLoctionRelativeToMoonReport.Delimiter = ' ';
+GMAT EarthLoctionRelativeToMoonReport.ColumnWidth = 23;
+GMAT EarthLoctionRelativeToMoonReport.WriteReport = true;
+
+Create ReportFile SunLoctionRelativeToMoonReport;
+GMAT SunLoctionRelativeToMoonReport.SolverIterations = Current;
+GMAT SunLoctionRelativeToMoonReport.UpperLeft = [ 0.09058823529411765 0.1833333333333333 ];
+GMAT SunLoctionRelativeToMoonReport.Size = [ 0.5982352941176471 0.7964285714285714 ];
+GMAT SunLoctionRelativeToMoonReport.RelativeZOrder = 35;
+GMAT SunLoctionRelativeToMoonReport.Maximized = false;
+GMAT SunLoctionRelativeToMoonReport.Filename = 'C:\Studies\GMAT\Sun_UTCXYZ_Moon.txt';
+GMAT SunLoctionRelativeToMoonReport.Precision = 16;
+GMAT SunLoctionRelativeToMoonReport.Add = {Sun.UTCGregorian, Sun.LunaEquator.X, Sun.LunaEquator.Y, Sun.LunaEquator.Z};
+GMAT SunLoctionRelativeToMoonReport.WriteHeaders = true;
+GMAT SunLoctionRelativeToMoonReport.LeftJustify = On;
+GMAT SunLoctionRelativeToMoonReport.ZeroFill = Off;
+GMAT SunLoctionRelativeToMoonReport.FixedWidth = true;
+GMAT SunLoctionRelativeToMoonReport.Delimiter = ' ';
+GMAT SunLoctionRelativeToMoonReport.ColumnWidth = 23;
+GMAT SunLoctionRelativeToMoonReport.WriteReport = true;
+
+
+%----------------------------------------
+%---------- Mission Sequence
+%----------------------------------------
+
+BeginMissionSequence;
+Propagate DefaultProp(JERICCO) {JERICCO.ElapsedDays = 730};

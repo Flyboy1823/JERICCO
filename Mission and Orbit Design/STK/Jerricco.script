@@ -1,0 +1,317 @@
+%General Mission Analysis Tool(GMAT) Script
+%Created: 2022-12-21 18:30:49
+
+
+%----------------------------------------
+%---------- Spacecraft
+%----------------------------------------
+
+Create Spacecraft Jericco;
+GMAT Jericco.DateFormat = UTCGregorian;
+GMAT Jericco.Epoch = '01 Jul 2024 11:59:28.000';
+GMAT Jericco.CoordinateSystem = MJ2000Eq;
+GMAT Jericco.DisplayStateType = Keplerian;
+GMAT Jericco.SMA = 1947.300000000018;
+GMAT Jericco.ECC = 5.532349325348193e-15;
+GMAT Jericco.INC = 86;
+GMAT Jericco.RAAN = 25.00000000000026;
+GMAT Jericco.AOP = 0;
+GMAT Jericco.TA = 8.537736462515939e-07;
+GMAT Jericco.DryMass = 850;
+GMAT Jericco.Cd = 2.2;
+GMAT Jericco.Cr = 1.8;
+GMAT Jericco.DragArea = 15;
+GMAT Jericco.SRPArea = 1;
+GMAT Jericco.SPADDragScaleFactor = 1;
+GMAT Jericco.SPADSRPScaleFactor = 1;
+GMAT Jericco.NAIFId = -10000001;
+GMAT Jericco.NAIFIdReferenceFrame = -9000001;
+GMAT Jericco.OrbitColor = Red;
+GMAT Jericco.TargetColor = Teal;
+GMAT Jericco.OrbitErrorCovariance = [ 1e+70 0 0 0 0 0 ; 0 1e+70 0 0 0 0 ; 0 0 1e+70 0 0 0 ; 0 0 0 1e+70 0 0 ; 0 0 0 0 1e+70 0 ; 0 0 0 0 0 1e+70 ];
+GMAT Jericco.CdSigma = 1e+70;
+GMAT Jericco.CrSigma = 1e+70;
+GMAT Jericco.Id = 'SatId';
+GMAT Jericco.Attitude = CoordinateSystemFixed;
+GMAT Jericco.SPADSRPInterpolationMethod = Bilinear;
+GMAT Jericco.SPADSRPScaleFactorSigma = 1e+70;
+GMAT Jericco.SPADDragInterpolationMethod = Bilinear;
+GMAT Jericco.SPADDragScaleFactorSigma = 1e+70;
+GMAT Jericco.ModelFile = 'aura.3ds';
+GMAT Jericco.ModelOffsetX = 0;
+GMAT Jericco.ModelOffsetY = 0;
+GMAT Jericco.ModelOffsetZ = 0;
+GMAT Jericco.ModelRotationX = 0;
+GMAT Jericco.ModelRotationY = 0;
+GMAT Jericco.ModelRotationZ = 0;
+GMAT Jericco.ModelScale = 1;
+GMAT Jericco.AttitudeDisplayStateType = 'Quaternion';
+GMAT Jericco.AttitudeRateDisplayStateType = 'AngularVelocity';
+GMAT Jericco.AttitudeCoordinateSystem = EarthMJ2000Eq;
+GMAT Jericco.EulerAngleSequence = '321';
+
+%----------------------------------------
+%---------- GroundStations
+%----------------------------------------
+
+Create GroundStation GroundStation1;
+GMAT GroundStation1.OrbitColor = Thistle;
+GMAT GroundStation1.TargetColor = DarkGray;
+GMAT GroundStation1.CentralBody = Earth;
+GMAT GroundStation1.StateType = Spherical;
+GMAT GroundStation1.HorizonReference = Sphere;
+GMAT GroundStation1.Location1 = 32.794;
+GMAT GroundStation1.Location2 = 34.9896;
+GMAT GroundStation1.Location3 = 0.6;
+GMAT GroundStation1.Id = 'StationId';
+GMAT GroundStation1.IonosphereModel = 'None';
+GMAT GroundStation1.TroposphereModel = 'None';
+GMAT GroundStation1.DataSource = 'Constant';
+GMAT GroundStation1.Temperature = 295.1;
+GMAT GroundStation1.Pressure = 1013.5;
+GMAT GroundStation1.Humidity = 55;
+GMAT GroundStation1.MinimumElevationAngle = 7;
+
+
+
+%----------------------------------------
+%---------- ForceModels
+%----------------------------------------
+
+Create ForceModel PolarLunar_ForceModel;
+GMAT PolarLunar_ForceModel.CentralBody = Luna;
+GMAT PolarLunar_ForceModel.PrimaryBodies = {Luna};
+GMAT PolarLunar_ForceModel.PointMasses = {Earth, Sun};
+GMAT PolarLunar_ForceModel.Drag = None;
+GMAT PolarLunar_ForceModel.SRP = On;
+GMAT PolarLunar_ForceModel.RelativisticCorrection = Off;
+GMAT PolarLunar_ForceModel.ErrorControl = RSSStep;
+GMAT PolarLunar_ForceModel.GravityField.Luna.Degree = 20;
+GMAT PolarLunar_ForceModel.GravityField.Luna.Order = 20;
+GMAT PolarLunar_ForceModel.GravityField.Luna.StmLimit = 100;
+GMAT PolarLunar_ForceModel.GravityField.Luna.PotentialFile = 'LP165P.cof';
+GMAT PolarLunar_ForceModel.GravityField.Luna.TideModel = 'None';
+GMAT PolarLunar_ForceModel.SRP.Flux = 1367;
+GMAT PolarLunar_ForceModel.SRP.SRPModel = Spherical;
+GMAT PolarLunar_ForceModel.SRP.Nominal_Sun = 149597870.691;
+
+%----------------------------------------
+%---------- Propagators
+%----------------------------------------
+
+Create Propagator PolarLunar;
+GMAT PolarLunar.FM = PolarLunar_ForceModel;
+GMAT PolarLunar.Type = RungeKutta89;
+GMAT PolarLunar.InitialStepSize = 60;
+GMAT PolarLunar.Accuracy = 9.999999999999999e-12;
+GMAT PolarLunar.MinStep = 0.001;
+GMAT PolarLunar.MaxStep = 2700;
+GMAT PolarLunar.MaxStepAttempts = 50;
+GMAT PolarLunar.StopIfAccuracyIsViolated = true;
+
+%----------------------------------------
+%---------- Coordinate Systems
+%----------------------------------------
+
+Create CoordinateSystem MJ2000Eq;
+GMAT MJ2000Eq.Origin = Luna;
+GMAT MJ2000Eq.Axes = MJ2000Eq;
+
+Create CoordinateSystem SatToEarth;
+GMAT SatToEarth.Origin = Jericco;
+GMAT SatToEarth.Axes = ObjectReferenced;
+GMAT SatToEarth.XAxis = R;
+GMAT SatToEarth.ZAxis = N;
+GMAT SatToEarth.Primary = Jericco;
+GMAT SatToEarth.Secondary = Earth;
+
+Create CoordinateSystem SatToSun;
+GMAT SatToSun.Origin = Jericco;
+GMAT SatToSun.Axes = ObjectReferenced;
+GMAT SatToSun.XAxis = R;
+GMAT SatToSun.ZAxis = N;
+GMAT SatToSun.Primary = Jericco;
+GMAT SatToSun.Secondary = Sun;
+
+Create CoordinateSystem LunaFixed;
+GMAT LunaFixed.Origin = Luna;
+GMAT LunaFixed.Axes = BodyFixed;
+
+%----------------------------------------
+%---------- EventLocators
+%----------------------------------------
+
+Create ContactLocator HaifaContact;
+GMAT HaifaContact.Target = Jericco;
+GMAT HaifaContact.Filename = 'ContactLocator1.txt';
+GMAT HaifaContact.InputEpochFormat = 'TAIModJulian';
+GMAT HaifaContact.InitialEpoch = '21545';
+GMAT HaifaContact.StepSize = 10;
+GMAT HaifaContact.FinalEpoch = '21545.138';
+GMAT HaifaContact.UseLightTimeDelay = true;
+GMAT HaifaContact.UseStellarAberration = true;
+GMAT HaifaContact.WriteReport = true;
+GMAT HaifaContact.RunMode = Automatic;
+GMAT HaifaContact.UseEntireInterval = true;
+GMAT HaifaContact.Observers = {GroundStation1};
+GMAT HaifaContact.LightTimeDirection = Transmit;
+
+Create EclipseLocator NoSunContact;
+GMAT NoSunContact.Spacecraft = Jericco;
+GMAT NoSunContact.Filename = 'EclipseLocator1.txt';
+GMAT NoSunContact.OccultingBodies = {Earth};
+GMAT NoSunContact.InputEpochFormat = 'TAIModJulian';
+GMAT NoSunContact.InitialEpoch = '21545';
+GMAT NoSunContact.StepSize = 10;
+GMAT NoSunContact.FinalEpoch = '21545.138';
+GMAT NoSunContact.UseLightTimeDelay = true;
+GMAT NoSunContact.UseStellarAberration = true;
+GMAT NoSunContact.WriteReport = true;
+GMAT NoSunContact.RunMode = Automatic;
+GMAT NoSunContact.UseEntireInterval = true;
+GMAT NoSunContact.EclipseTypes = {'Umbra', 'Penumbra', 'Antumbra'};
+
+%----------------------------------------
+%---------- Subscribers
+%----------------------------------------
+
+Create OrbitView Moon;
+GMAT Moon.SolverIterations = Current;
+GMAT Moon.UpperLeft = [ 0 0.1128010139416983 ];
+GMAT Moon.Size = [ 0.5375868603916614 0.449936628643853 ];
+GMAT Moon.RelativeZOrder = 180;
+GMAT Moon.Maximized = false;
+GMAT Moon.Add = {Jericco, Luna};
+GMAT Moon.CoordinateSystem = MJ2000Eq;
+GMAT Moon.DrawObject = [ true true ];
+GMAT Moon.DataCollectFrequency = 1;
+GMAT Moon.UpdatePlotFrequency = 50;
+GMAT Moon.NumPointsToRedraw = 0;
+GMAT Moon.ShowPlot = true;
+GMAT Moon.MaxPlotPoints = 20000;
+GMAT Moon.ShowLabels = true;
+GMAT Moon.ViewPointReference = Luna;
+GMAT Moon.ViewPointVector = [ 30000 10000 30000 ];
+GMAT Moon.ViewDirection = Luna;
+GMAT Moon.ViewScaleFactor = 1;
+GMAT Moon.ViewUpCoordinateSystem = MJ2000Eq;
+GMAT Moon.ViewUpAxis = Z;
+GMAT Moon.EclipticPlane = Off;
+GMAT Moon.XYPlane = Off;
+GMAT Moon.WireFrame = Off;
+GMAT Moon.Axes = On;
+GMAT Moon.Grid = Off;
+GMAT Moon.SunLine = Off;
+GMAT Moon.UseInitialView = On;
+GMAT Moon.StarCount = 7000;
+GMAT Moon.EnableStars = On;
+GMAT Moon.EnableConstellations = On;
+
+Create GroundTrackPlot MoonTrack;
+GMAT MoonTrack.SolverIterations = Current;
+GMAT MoonTrack.UpperLeft = [ 0.3695514845230575 0.4119138149556401 ];
+GMAT MoonTrack.Size = [ 0.5375868603916614 0.449936628643853 ];
+GMAT MoonTrack.RelativeZOrder = 158;
+GMAT MoonTrack.Maximized = false;
+GMAT MoonTrack.Add = {Jericco, Earth};
+GMAT MoonTrack.DataCollectFrequency = 1;
+GMAT MoonTrack.UpdatePlotFrequency = 50;
+GMAT MoonTrack.NumPointsToRedraw = 0;
+GMAT MoonTrack.ShowPlot = true;
+GMAT MoonTrack.MaxPlotPoints = 20000;
+GMAT MoonTrack.CentralBody = Luna;
+GMAT MoonTrack.TextureMap = 'Moon_HermesCelestiaMotherlode.jpg';
+
+Create XYPlot BetaAngle;
+GMAT BetaAngle.SolverIterations = Current;
+GMAT BetaAngle.UpperLeft = [ 0.09665192672141504 0.05069708491761724 ];
+GMAT BetaAngle.Size = [ 0.5375868603916614 0.449936628643853 ];
+GMAT BetaAngle.RelativeZOrder = 148;
+GMAT BetaAngle.Maximized = false;
+GMAT BetaAngle.XVariable = Jericco.A1ModJulian;
+GMAT BetaAngle.YVariables = {Jericco.Luna.BetaAngle};
+GMAT BetaAngle.ShowGrid = true;
+GMAT BetaAngle.ShowPlot = true;
+
+Create XYPlot Altitude;
+GMAT Altitude.SolverIterations = Current;
+GMAT Altitude.UpperLeft = [ 0.229943145925458 0.2560202788339671 ];
+GMAT Altitude.Size = [ 0.6449778900821226 0.7021546261089987 ];
+GMAT Altitude.RelativeZOrder = 189;
+GMAT Altitude.Maximized = false;
+GMAT Altitude.XVariable = Jericco.A1ModJulian;
+GMAT Altitude.YVariables = {Jericco.Luna.Altitude};
+GMAT Altitude.ShowGrid = true;
+GMAT Altitude.ShowPlot = true;
+
+Create OrbitView EarthOrbit;
+GMAT EarthOrbit.SolverIterations = Current;
+GMAT EarthOrbit.UpperLeft = [ 0.002526847757422615 0.4537389100126742 ];
+GMAT EarthOrbit.Size = [ 0.5369551484523057 0.449936628643853 ];
+GMAT EarthOrbit.RelativeZOrder = 172;
+GMAT EarthOrbit.Maximized = false;
+GMAT EarthOrbit.Add = {Jericco, Earth, Luna};
+GMAT EarthOrbit.CoordinateSystem = EarthMJ2000Eq;
+GMAT EarthOrbit.DrawObject = [ true true true ];
+GMAT EarthOrbit.DataCollectFrequency = 1;
+GMAT EarthOrbit.UpdatePlotFrequency = 50;
+GMAT EarthOrbit.NumPointsToRedraw = 0;
+GMAT EarthOrbit.ShowPlot = true;
+GMAT EarthOrbit.MaxPlotPoints = 20000;
+GMAT EarthOrbit.ShowLabels = true;
+GMAT EarthOrbit.ViewPointReference = Earth;
+GMAT EarthOrbit.ViewPointVector = [ 0 0 30000 ];
+GMAT EarthOrbit.ViewDirection = Earth;
+GMAT EarthOrbit.ViewScaleFactor = 1;
+GMAT EarthOrbit.ViewUpCoordinateSystem = EarthMJ2000Eq;
+GMAT EarthOrbit.ViewUpAxis = Z;
+GMAT EarthOrbit.EclipticPlane = Off;
+GMAT EarthOrbit.XYPlane = On;
+GMAT EarthOrbit.WireFrame = Off;
+GMAT EarthOrbit.Axes = On;
+GMAT EarthOrbit.Grid = Off;
+GMAT EarthOrbit.SunLine = Off;
+GMAT EarthOrbit.UseInitialView = On;
+GMAT EarthOrbit.StarCount = 7000;
+GMAT EarthOrbit.EnableStars = On;
+GMAT EarthOrbit.EnableConstellations = Off;
+
+Create OrbitView SunOrbit;
+GMAT SunOrbit.SolverIterations = Current;
+GMAT SunOrbit.UpperLeft = [ 0.2097283638660771 0.173637515842839 ];
+GMAT SunOrbit.Size = [ 0.5369551484523057 0.449936628643853 ];
+GMAT SunOrbit.RelativeZOrder = 168;
+GMAT SunOrbit.Maximized = false;
+GMAT SunOrbit.Add = {Jericco, Earth, Sun, Luna};
+GMAT SunOrbit.CoordinateSystem = EarthMJ2000Eq;
+GMAT SunOrbit.DrawObject = [ true true true true ];
+GMAT SunOrbit.DataCollectFrequency = 1;
+GMAT SunOrbit.UpdatePlotFrequency = 50;
+GMAT SunOrbit.NumPointsToRedraw = 0;
+GMAT SunOrbit.ShowPlot = true;
+GMAT SunOrbit.MaxPlotPoints = 20000;
+GMAT SunOrbit.ShowLabels = true;
+GMAT SunOrbit.ViewPointReference = Sun;
+GMAT SunOrbit.ViewPointVector = [ 0 0 30000 ];
+GMAT SunOrbit.ViewDirection = Sun;
+GMAT SunOrbit.ViewScaleFactor = 1;
+GMAT SunOrbit.ViewUpCoordinateSystem = EarthMJ2000Eq;
+GMAT SunOrbit.ViewUpAxis = Z;
+GMAT SunOrbit.EclipticPlane = Off;
+GMAT SunOrbit.XYPlane = Off;
+GMAT SunOrbit.WireFrame = Off;
+GMAT SunOrbit.Axes = On;
+GMAT SunOrbit.Grid = Off;
+GMAT SunOrbit.SunLine = Off;
+GMAT SunOrbit.UseInitialView = On;
+GMAT SunOrbit.StarCount = 7000;
+GMAT SunOrbit.EnableStars = On;
+GMAT SunOrbit.EnableConstellations = Off;
+
+
+%----------------------------------------
+%---------- Mission Sequence
+%----------------------------------------
+
+BeginMissionSequence;
+Propagate PolarLunar(Jericco) {Jericco.ElapsedDays = 150};

@@ -1,0 +1,26 @@
+Random Earth True Anomaly: 245 [deg]
+Random Moon True Anomaly: 236 [deg]
+Random Satellite True Anomaly: 58 [deg]
+Simulation Time is: 365 [days]
+
+Earth-Sun line of sight mean angle is: 89.85 [deg]
+Earth-Sun line of sight STD angle is: 35.38 [deg]
+
+Earth And Sun State: 
+Min Time On: 0.22998 [min] 
+Max Time On: 8196.7905 [min] 
+Average Time On: 81.1014 [min] 
+Average Time On And In Range : 72.5126 [min] 
+Min Time Off: 0.27332 [min] 
+Max Time Off: 59.3535 [min] 
+Average Time Off: 25.2114 [min] 
+
+Earth Only State: 
+Min Time On: 97.4164 [min] 
+Max Time On: 8197.3636 [min] 
+Average Time On: 182.9267 [min] 
+Min Time Off: 0.27332 [min] 
+Max Time Off: 29.8534 [min] 
+Average Time Off: 23.1191 [min] 
+
+Program run time is: 53.55 seconds
